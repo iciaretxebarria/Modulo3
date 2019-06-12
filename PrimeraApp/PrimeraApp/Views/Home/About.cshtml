@@ -1,0 +1,66 @@
+﻿
+@model List<Animal>
+
+@{
+
+    ViewData["Title"] = "About";
+
+    //int edad = (int)ViewData["edad"];
+
+    //List<string> compras = (List<string>)ViewData["compras"];
+
+
+
+}
+
+
+@*<h1>@edad</h1>
+
+    @Model.Familia
+
+    <ul>
+        @{
+            foreach (string compra in compras)
+            {
+            <li>@compra</li>
+            }
+
+        }
+
+    </ul>
+
+    <img src="@Url.Content(Model.Imagen)" alt="canis-lupus" />*@
+
+
+<table class="table">
+    <thead class="thead-dark">
+
+        <tr>
+            <th scope="col">Especie</th>
+            <th scope="col">Género</th>
+            <th scope="col">Familia</th>
+            <th scope="col">Imagen</th>
+        </tr>
+
+
+        @{
+            foreach (Animal X in Model)
+            {
+                <tr>
+                    <td>@X.Especie</td>
+                    <td>@X.Genero</td>
+                    <td>@X.Familia</td>
+                    <td class="celda-foto"><img class="foto" src="@Url.Content(X.Imagen)"/></td>
+
+                </tr>
+            }
+
+
+        }
+
+</table>
+
+
+
+
+

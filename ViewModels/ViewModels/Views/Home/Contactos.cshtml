@@ -1,0 +1,37 @@
+﻿@model AgendaContactoVM
+
+
+
+@{
+    ViewData["Title"] = "Contactos";
+}
+
+<div class="container">
+    <div class="jumbotron">
+        <h1 id="titulo">@Model.Agenda.Propietario</h1>
+        <h2>Fecha creación: @Model.Agenda.FechaCreacion.ToString("dd/MM/yyyy")</h2>
+        <h2>@Model.ListaContactos.Count contactos</h2>
+    </div>
+</div>
+
+
+
+
+<div class="row d-flex justify-content-center">
+    @{foreach (Contacto X in Model.ListaContactos)
+        {
+
+            <div class="card col-lg-4" style="width: 18rem;">
+                <img class="card-img-top foto" src=@Url.Content(X.Imagen) alt="foto contacto">
+                <div class="card-body">
+                    <h5 class="card-title">@X.Nombre</h5>
+                    <h5 class="card-title">@X.Apellidos</h5>
+                    <h5 class="card-title">@X.Telefono</h5>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+
+
