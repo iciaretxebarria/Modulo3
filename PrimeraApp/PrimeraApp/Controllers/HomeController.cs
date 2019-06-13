@@ -20,7 +20,7 @@ namespace PrimeraApp.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult Animales(string busqueda)
         {
             //ViewData["edad"] = 30;
 
@@ -31,7 +31,7 @@ namespace PrimeraApp.Controllers
 
             //ViewData["compras"] = compras;
 
-            List<Animal> animales = new List<Animal>();
+
 
             Animal a1 = new Animal
 
@@ -69,13 +69,30 @@ namespace PrimeraApp.Controllers
                 Imagen = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLGIH1EduYrBacm6De_Flcp3rR1hGj4wyUzw_-XhF1ch6Cil_icg"
             };
 
+            List<Animal> animales = new List<Animal>();
+
 
             animales.Add(a1);
             animales.Add(a2);
             animales.Add(a3);
             animales.Add(a4);
 
-            return View(animales);
+            //animales = animales.Where(x => x.Familia.Contains("M"))
+            //            .OrderBy(x => x.Especie)
+            //            //.OrderByDescending(x => x.Especie)
+
+            //    .ToList();
+
+            Animal animalBuscado = null;
+
+            if (busqueda != null && busqueda != "")
+            {
+                animalBuscado = animales.FirstOrDefault(x => x.Especie.Contains(busqueda));
+            }
+
+
+            return View(animalBuscado);
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -84,7 +101,7 @@ namespace PrimeraApp.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-       
+
 
     }
 }

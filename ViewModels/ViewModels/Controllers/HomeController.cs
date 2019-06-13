@@ -20,7 +20,11 @@ namespace ViewModels.Controllers
             return View();
         }
 
-        public IActionResult Contactos()
+
+
+
+
+        public IActionResult Contactos(string tipo)
         {
 
             Contacto c1 = new Contacto
@@ -28,6 +32,7 @@ namespace ViewModels.Controllers
                 Nombre = "Minna",
                 Apellidos = "Heinonen",
                 Telefono = "658569874",
+                Tipo = "Trabajo",
                 Imagen = "https://okdiario.com/img/2017/09/03/todo-lo-que-debes-saber-sobre-los-peces-5-655x368.jpg"
             };
 
@@ -36,6 +41,7 @@ namespace ViewModels.Controllers
                 Nombre = "Deivid",
                 Apellidos = "Rodríguez",
                 Telefono = "658596222",
+                Tipo = "Familia",
                 Imagen = "https://i.ytimg.com/vi/zFO-0AlgSDI/maxresdefault.jpg"
             };
 
@@ -44,6 +50,7 @@ namespace ViewModels.Controllers
                 Nombre = "Ama",
                 Apellidos = "Ama",
                 Telefono = "555666999",
+                Tipo = "Familia",
                 Imagen = "https://fotos01.farodevigo.es/2016/07/29/646x260/gaviota.jpg"
             };
 
@@ -52,6 +59,7 @@ namespace ViewModels.Controllers
                 Nombre = "Laura",
                 Apellidos = "Hernández",
                 Telefono = "111222333",
+                Tipo = "Amigos",
                 Imagen = "https://i1.wp.com/www.sopitas.com/wp-content/uploads/2018/10/cerebro-de-ardilla--1110x580.jpg"
             };
 
@@ -60,6 +68,7 @@ namespace ViewModels.Controllers
                 Nombre = "Natalia",
                 Apellidos = "Hernández",
                 Telefono = "895698789",
+                Tipo = "Amigos",
                 Imagen = "https://www.thelocal.se/userdata/images/article/se/33428.jpg"
             };
 
@@ -68,6 +77,7 @@ namespace ViewModels.Controllers
                 Nombre = "Maitetxu",
                 Apellidos = "Etxebarria",
                 Telefono = "946008987",
+                Tipo = "Familia",
                 Imagen = "http://photos1.blogger.com/blogger/5986/3292/1600/foca.jpg"
             };
 
@@ -88,6 +98,19 @@ namespace ViewModels.Controllers
                 //FechaCreacion = Convert.ToDatetime("12/03/2017")
             };
 
+            if (tipo=="Familia")
+            {
+                contactos = contactos.Where(x => x.Tipo.Contains("Familia")).ToList();
+            }
+            else if (tipo=="Amigos")
+            {
+                contactos = contactos.Where(x => x.Tipo.Contains("Amigos")).ToList();
+            }
+            else if (tipo == "Trabajo")
+            {
+                contactos = contactos.Where(x => x.Tipo.Contains("Trabajo")).ToList();
+            }
+
             AgendaContactoVM misContactos = new AgendaContactoVM
 
             {
@@ -98,6 +121,9 @@ namespace ViewModels.Controllers
 
             return View(misContactos);
         }
+
+        
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

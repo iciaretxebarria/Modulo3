@@ -10,7 +10,7 @@
     <div class="jumbotron">
         <h1 id="titulo">@Model.Agenda.Propietario</h1>
         <h2>Fecha creación: @Model.Agenda.FechaCreacion.ToString("dd/MM/yyyy")</h2>
-        <h2>@Model.ListaContactos.Count contactos</h2>
+        <h2>@Model.ListaContactos.Count contacto(s)</h2>
     </div>
 </div>
 
@@ -27,6 +27,7 @@
                     <h5 class="card-title">@X.Nombre</h5>
                     <h5 class="card-title">@X.Apellidos</h5>
                     <h5 class="card-title">@X.Telefono</h5>
+                    <h5 class="card-title">@X.Tipo</h5>
                 </div>
             </div>
         }

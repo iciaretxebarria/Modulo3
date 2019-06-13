@@ -1,7 +1,26 @@
-﻿
+﻿@model Animal
+
+
 @{
     ViewData["Title"] = "Animales";
 }
 
 <h1>Animales</h1>
+
+<form asp-controller="Home" asp-action="">
+    <input type="text" name="busqueda" />
+    <button type="submit">Buscar</button>
+</form>
+
+@{
+
+    if (Model.Especie != null)
+    {
+        <h1>Animal que has buscado</h1>
+        <p>@Model.Especie</p>
+    }
+}
+
+
+
 
