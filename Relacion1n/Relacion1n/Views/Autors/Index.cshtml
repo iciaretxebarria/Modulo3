@@ -1,20 +1,10 @@
-﻿@model IEnumerable<Relacion1a1Autores.Models.Autor>
+﻿@model IEnumerable<Relacion1n.Models.Autor>
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
-
-
-
-<form class="form-inline" asp-controller="Autores" asp-action="Index">
-    <div class="form-group mx-sm-3 mb-2">
-        <input name="busqueda" type="text" class="form-control" id="input2" placeholder="Escribe tu búsqueda">
-    </div>
-    <button type="submit" class="btn btn-primary mb-2">Buscar</button>
-</form>
-
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -26,13 +16,13 @@
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.FechaNacimiento)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nacionalidad)
-            </th>
-            <th>
-                Biografía
+               Libros
             </th>
             <th></th>
         </tr>
@@ -44,13 +34,24 @@
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.FechaNacimiento)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Nacionalidad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Biografia.Titulo)
+                <ul>
+                   
+               @{ 
+                   foreach (Libro X in item.Libros)
+                   {
+                       <li>@X.Titulo</li>
+                   }
+
+
+               }
+                </ul>
+
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

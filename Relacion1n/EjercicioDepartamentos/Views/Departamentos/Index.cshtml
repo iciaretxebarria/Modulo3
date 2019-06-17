@@ -1,0 +1,98 @@
+﻿@model IEnumerable<EjercicioDepartamentos.Models.Departamento>
+
+@{
+    ViewData["Title"] = "Index";
+    List<Departamento> dept = (List<Departamento>)ViewData["dep"];
+}
+<h1>Departamentos</h1>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+
+<form class="form-inline" asp-controller="Departamentos" asp-action="Index">
+    <select class="form-control" name="seleccion">
+        <option value="Todos">Todos</option>
+
+        @{foreach (Departamento item in dept)
+            {
+                <option value="@item.Nombre">@item.Nombre</option>
+            }
+        }
+    </select>
+        <div class="form-group mx-sm-3">
+            @*<label for="input" class="sr-only">Nombre</label>*@
+            <input type="text" class="form-control" name="nombreBuscado" placeholder="Nombre">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+
+
+
+@{
+
+    foreach (var item in Model)
+    {
+
+        <div class="jumbotron">
+            <h2>Departamento: @item.Nombre</h2>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Apellidos
+                    </th>
+                    <th>
+                        Teléfono
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{ foreach (Empleado X in item.Empleados)
+                    {
+                        <tr>
+                            <td>
+                                @X.Nombre
+                            </td>
+                            <td>
+                                @X.Apellidos
+                            </td>
+                            <td>
+                                @X.Telefono
+                            </td>
+                            <td>
+                                @X.Email
+                            </td>
+                            <td>
+                                <a asp-controller="Empleados" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-controller="Empleados" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-controller="Empleados" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+
+    }
+
+
+}
+
+
+
+
+
+
+

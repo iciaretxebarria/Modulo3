@@ -1,20 +1,10 @@
-﻿@model IEnumerable<Relacion1a1Autores.Models.Autor>
+﻿@model IEnumerable<EjercicioDepartamentos.Models.Empleado>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-
-
-<form class="form-inline" asp-controller="Autores" asp-action="Index">
-    <div class="form-group mx-sm-3 mb-2">
-        <input name="busqueda" type="text" class="form-control" id="input2" placeholder="Escribe tu búsqueda">
-    </div>
-    <button type="submit" class="btn btn-primary mb-2">Buscar</button>
-</form>
-
+<h1>Empleados</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -26,13 +16,16 @@
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FechaNacimiento)
+                @Html.DisplayNameFor(model => model.Apellidos)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nacionalidad)
+                @Html.DisplayNameFor(model => model.Telefono)
             </th>
             <th>
-                Biografía
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Departamento)
             </th>
             <th></th>
         </tr>
@@ -44,13 +37,16 @@
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FechaNacimiento)
+                @Html.DisplayFor(modelItem => item.Apellidos)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Nacionalidad)
+                @Html.DisplayFor(modelItem => item.Telefono)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Biografia.Titulo)
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Departamento.Nombre)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
