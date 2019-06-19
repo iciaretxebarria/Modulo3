@@ -1,0 +1,90 @@
+﻿@model IEnumerable<VideoclubWebApp.Models.Film>
+
+@{
+    ViewData["Title"] = "Index";
+    List<string>
+        generos = (List<string>)ViewData["generos"];
+
+}
+
+<h1>Películas</h1>
+
+
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form class="form-inline" asp-controller="Films" asp-action="Index">
+
+    <select class="form-control" name="seleccion">
+        <option value="">Género</option>
+
+        @foreach (string genero in generos)
+        {
+            <option value="@genero">@genero</option>
+        }
+    </select>
+    <div class="form-group mx-sm-3">
+        <button class="btn btn-primary" type="submit">Buscar</button>
+    </div>
+
+
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Título
+            </th>
+            <th>
+                Sinopsis
+            </th>
+            <th>
+                Género
+            </th>
+            <th>
+                Imagen
+            </th>
+            <th>
+                Alquilada(Si/No)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Film film in Model)
+        {
+            <tr>
+                <td>
+                    @film.Title
+                </td>
+                <td>
+                    @film.Synopsis
+                </td>
+                <td>
+                    @film.Genre
+                </td>
+                <td>
+                    <img class="imagen" src=@Url.Content(film.Image)>
+                </td>
+                <td>
+                    @film.Rented
+                </td>
+                <td>
+
+                    @if (film.Rented == false)
+                    {
+
+                        <a asp-action="Rent" asp-route-id="@film.Id">Alquilar</a>
+                    }
+                    |
+                    <a asp-action="Edit" asp-route-id="@film.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@film.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@film.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
