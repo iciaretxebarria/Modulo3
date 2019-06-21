@@ -1,0 +1,34 @@
+﻿@using ProyectoMiPueblo.Data
+@inject SignInManager<AppUser> SignInManager
+@inject ApplicationDbContext _context
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+
+    AppUser user = await SignInManager.UserManager.FindByEmailAsync(User.Identity.Name);
+    Anfitrion anfitrion = _context.Anfitriones.FirstOrDefault(x => x.UserId == user.Id);
+}
+    <ul class="nav nav-pills flex-column">
+        <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Perfil</a></li>
+        <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Contraseña</a></li>
+        @if (hasExternalLogins)
+        {
+            <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>
+        }
+
+        @if (_context.Anfitriones.FirstOrDefault(x => x.UserId == user.Id) != null)
+        {
+            @if (_context.Estancia.FirstOrDefault(x => x.AnfitrionId == anfitrion.Id) != null)
+            {
+
+                <li class="nav-item"><a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">Gestiona tu estancia</a></li>
+            }
+            else
+            {
+                <li class="nav-item"><a class="nav-link" asp-controller="Estancias" asp-action="Create">Publica una estancia</a></li>
+
+            }
+        }
+
+
+        <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Datos personales</a></li>
+    </ul>

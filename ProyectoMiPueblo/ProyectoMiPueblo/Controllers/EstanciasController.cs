@@ -2,31 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Scaffolding.Models;
+using ProyectoMiPueblo.Data;
+using ProyectoMiPueblo.Models;
 
-namespace Scaffolding.Controllers
+namespace ProyectoMiPueblo.Controllers
 {
-    public class CochesController : Controller
+    public class EstanciasController : Controller
     {
-        private readonly ApplicationDBContext _context;
-        //private UserManager<AppUser> _userManager;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CochesController(ApplicationDBContext context)//(UserManager<AppUser>
+        public EstanciasController(ApplicationDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
-            //userManager = userManager;
+            _userManager = userManager;
         }
 
-        // GET: Coches
+        // GET: Estancias
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Coche.ToListAsync());
+            var applicationDbContext = _context.Estancia.Include(e => e.Anfitrion);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Coches/Details/5
+        // GET: Estancias/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,39 +37,47 @@ namespace Scaffolding.Controllers
                 return NotFound();
             }
 
-            var coche = await _context.Coche
+            var estancia = await _context.Estancia
+                .Include(e => e.Anfitrion)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (coche == null)
+            if (estancia == null)
             {
                 return NotFound();
             }
 
-            return View(coche);
+            return View(estancia);
         }
 
-        // GET: Coches/Create
+        // GET: Estancias/Create
         public IActionResult Create()
         {
+            
             return View();
         }
 
-        // POST: Coches/Create
+        // POST: Estancias/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Marca,Modelo")] Coche coche)
+        public async Task<IActionResult> Create([Bind("Id,Duracion,Foto")] Estancia estancia)
         {
+
+            AppUser user =await _userManager.FindByEmailAsync(User.Identity.Name);
+            Anfitrion anfitrion =await _context.Anfitriones.FirstOrDefaultAsync(x=>x.UserId == user.Id);
+            estancia.Anfitrion = anfitrion;
+            estancia.AnfitrionId = anfitrion.Id;
             if (ModelState.IsValid)
             {
-                _context.Add(coche);
+                _context.Add(estancia);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(coche);
+           
+            return View(estancia);
         }
 
-        // GET: Coches/Edit/5
+        // GET: Estancias/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,22 +85,23 @@ namespace Scaffolding.Controllers
                 return NotFound();
             }
 
-            var coche = await _context.Coche.FindAsync(id);
-            if (coche == null)
+            var estancia = await _context.Estancia.FindAsync(id);
+            if (estancia == null)
             {
                 return NotFound();
             }
-            return View(coche);
+            ViewData["AnfitrionId"] = new SelectList(_context.Anfitriones, "Id", "Pueblo", estancia.AnfitrionId);
+            return View(estancia);
         }
 
-        // POST: Coches/Edit/5
+        // POST: Estancias/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Marca,Modelo")] Coche coche)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Duracion,Foto,AnfitrionId")] Estancia estancia)
         {
-            if (id != coche.Id)
+            if (id != estancia.Id)
             {
                 return NotFound();
             }
@@ -98,12 +110,12 @@ namespace Scaffolding.Controllers
             {
                 try
                 {
-                    _context.Update(coche);
+                    _context.Update(estancia);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CocheExists(coche.Id))
+                    if (!EstanciaExists(estancia.Id))
                     {
                         return NotFound();
                     }
@@ -114,10 +126,11 @@ namespace Scaffolding.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(coche);
+            ViewData["AnfitrionId"] = new SelectList(_context.Anfitriones, "Id", "Pueblo", estancia.AnfitrionId);
+            return View(estancia);
         }
 
-        // GET: Coches/Delete/5
+        // GET: Estancias/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,30 +138,31 @@ namespace Scaffolding.Controllers
                 return NotFound();
             }
 
-            var coche = await _context.Coche
+            var estancia = await _context.Estancia
+                .Include(e => e.Anfitrion)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (coche == null)
+            if (estancia == null)
             {
                 return NotFound();
             }
 
-            return View(coche);
+            return View(estancia);
         }
 
-        // POST: Coches/Delete/5
+        // POST: Estancias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var coche = await _context.Coche.FindAsync(id);
-            _context.Coche.Remove(coche);
+            var estancia = await _context.Estancia.FindAsync(id);
+            _context.Estancia.Remove(estancia);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CocheExists(int id)
+        private bool EstanciaExists(int id)
         {
-            return _context.Coche.Any(e => e.Id == id);
+            return _context.Estancia.Any(e => e.Id == id);
         }
     }
 }

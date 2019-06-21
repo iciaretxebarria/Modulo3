@@ -5,28 +5,30 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Scaffolding.Models;
+using ProyectoMiPueblo.Data;
+using ProyectoMiPueblo.Models;
 
-namespace Scaffolding.Controllers
+namespace ProyectoMiPueblo.Controllers
 {
-    public class CochesController : Controller
+    public class AnfitrionesController : Controller
     {
-        private readonly ApplicationDBContext _context;
-        //private UserManager<AppUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public CochesController(ApplicationDBContext context)//(UserManager<AppUser>
+        public AnfitrionesController(ApplicationDbContext context)
         {
             _context = context;
-            //userManager = userManager;
         }
 
-        // GET: Coches
+        
+
+        // GET: Anfitriones
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Coche.ToListAsync());
+            var applicationDbContext = _context.Anfitriones.Include(a => a.User);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Coches/Details/5
+        // GET: Anfitriones/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,39 +36,42 @@ namespace Scaffolding.Controllers
                 return NotFound();
             }
 
-            var coche = await _context.Coche
+            var anfitrion = await _context.Anfitriones
+                .Include(a => a.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (coche == null)
+            if (anfitrion == null)
             {
                 return NotFound();
             }
 
-            return View(coche);
+            return View(anfitrion);
         }
 
-        // GET: Coches/Create
+        // GET: Anfitriones/Create
         public IActionResult Create()
         {
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
-        // POST: Coches/Create
+        // POST: Anfitriones/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Marca,Modelo")] Coche coche)
+        public async Task<IActionResult> Create([Bind("Id,Pueblo,UserId")] Anfitrion anfitrion)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(coche);
+                _context.Add(anfitrion);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(coche);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", anfitrion.UserId);
+            return View(anfitrion);
         }
 
-        // GET: Coches/Edit/5
+        // GET: Anfitriones/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,22 +79,23 @@ namespace Scaffolding.Controllers
                 return NotFound();
             }
 
-            var coche = await _context.Coche.FindAsync(id);
-            if (coche == null)
+            var anfitrion = await _context.Anfitriones.FindAsync(id);
+            if (anfitrion == null)
             {
                 return NotFound();
             }
-            return View(coche);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", anfitrion.UserId);
+            return View(anfitrion);
         }
 
-        // POST: Coches/Edit/5
+        // POST: Anfitriones/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Marca,Modelo")] Coche coche)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Pueblo,UserId")] Anfitrion anfitrion)
         {
-            if (id != coche.Id)
+            if (id != anfitrion.Id)
             {
                 return NotFound();
             }
@@ -98,12 +104,12 @@ namespace Scaffolding.Controllers
             {
                 try
                 {
-                    _context.Update(coche);
+                    _context.Update(anfitrion);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CocheExists(coche.Id))
+                    if (!AnfitrionExists(anfitrion.Id))
                     {
                         return NotFound();
                     }
@@ -114,10 +120,11 @@ namespace Scaffolding.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(coche);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", anfitrion.UserId);
+            return View(anfitrion);
         }
 
-        // GET: Coches/Delete/5
+        // GET: Anfitriones/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,30 +132,31 @@ namespace Scaffolding.Controllers
                 return NotFound();
             }
 
-            var coche = await _context.Coche
+            var anfitrion = await _context.Anfitriones
+                .Include(a => a.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (coche == null)
+            if (anfitrion == null)
             {
                 return NotFound();
             }
 
-            return View(coche);
+            return View(anfitrion);
         }
 
-        // POST: Coches/Delete/5
+        // POST: Anfitriones/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var coche = await _context.Coche.FindAsync(id);
-            _context.Coche.Remove(coche);
+            var anfitrion = await _context.Anfitriones.FindAsync(id);
+            _context.Anfitriones.Remove(anfitrion);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CocheExists(int id)
+        private bool AnfitrionExists(int id)
         {
-            return _context.Coche.Any(e => e.Id == id);
+            return _context.Anfitriones.Any(e => e.Id == id);
         }
     }
 }
